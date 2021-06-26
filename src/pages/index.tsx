@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button, Typography } from '@material-ui/core';
+import { Container, Button, Typography, CircularProgress } from '@material-ui/core';
 import SafeEnvironment from 'ui/components/feedback/SafeEnvironment/SafeEnvironment';
 import PageTitle from 'ui/components/data-display/PageTitle/PageTitle';
 import UserInformation from 'ui/components/data-display/UserInformation/UserInformation';
@@ -12,7 +12,17 @@ import {
 } from '../ui/styles/pages/index.style';
 
 export default function Home() {
-  const { cep, setCep, cepValido } = useIndex();
+  const {
+    cep,
+    setCep,
+    validCep,
+    searchCleaners,
+    errorMsg,
+    cleaners,
+    searchDone,
+    loading,
+    cleanersRemaining
+  } = useIndex();
   return (
     <Container>
       <SafeEnvironment />
@@ -33,56 +43,63 @@ export default function Home() {
             value={cep}
             onChange={(event) => setCep(event.target.value)}
           />
-          <Typography color={'error'}>CEP inválido.</Typography>
+          {errorMsg && <Typography color={'error'}>{errorMsg}</Typography>}
           <Button
             variant={'contained'}
             color={'secondary'}
             sx={{ width: '220px' }}
+            disabled={!validCep || loading}
+            onClick={() => searchCleaners(cep)}
           >
-            Buscar
+            {loading ? <CircularProgress size={20} /> : 'Buscar'}
           </Button>
         </FormElementsContainer>
 
-        <CleanersPaper>
-          <CleanersContainer>
-            <UserInformation
-              picture={'https://github.com/pmmdesenvolvedor.png'}
-              name={'Paulo M Martinelli'}
-              rating={4}
-              description={`Sorocaba, SP`}
-            />
-            <UserInformation
-              picture={'https://github.com/pmmdesenvolvedor.png'}
-              name={'Paulo M Martinelli'}
-              rating={4}
-              description={`Sorocaba, SP`}
-            />
-            <UserInformation
-              picture={'https://github.com/pmmdesenvolvedor.png'}
-              name={'Paulo M Martinelli'}
-              rating={4}
-              description={`Sorocaba, SP`}
-            />
-            <UserInformation
-              picture={'https://github.com/pmmdesenvolvedor.png'}
-              name={'Paulo M Martinelli'}
-              rating={4}
-              description={`Sorocaba, SP`}
-            />
-            <UserInformation
-              picture={'https://github.com/pmmdesenvolvedor.png'}
-              name={'Paulo M Martinelli'}
-              rating={4}
-              description={`Sorocaba, SP`}
-            />
-            <UserInformation
-              picture={'https://github.com/pmmdesenvolvedor.png'}
-              name={'Paulo M Martinelli'}
-              rating={4}
-              description={`Sorocaba, SP`}
-            />
-          </CleanersContainer>
-        </CleanersPaper>
+        {
+          searchDone && ( cleaners.length > 0 ?
+          (<CleanersPaper>
+            <CleanersContainer>
+            {
+              cleaners.map((cleaner, index) => {
+                return (
+                  <UserInformation
+                    key={`cleaner_${index}`}
+                    picture={cleaner.foto_usuario}
+                    name={cleaner.nome_completo}
+                    rating={cleaner.reputacao}
+                    description={cleaner.cidade}
+                  />
+                )
+              })
+            }
+
+
+
+            </CleanersContainer>
+
+            <Container sx={{ textAlign: 'center' }}>
+              { cleanersRemaining > 0 &&
+                (<Typography sx={{mt: 5}}>
+                  ...e mais {cleanersRemaining} {cleanersRemaining === 1 ? 'profissional atende' : 'profissionais atendem'}  ao seu endereço.
+                </Typography>)
+              }
+              <Button
+                variant={'contained'}
+                color={'secondary'}
+                sx={{ mt: 5 }}
+              >
+                Contratar um profissional
+              </Button>
+            </Container>
+          </CleanersPaper>)
+          :
+            <Typography align={'center'} color={'textPrimary'}>
+              Ainda não temos nenhuma diarista cadastrada na tua região.
+            </Typography>
+          )
+      }
+        
+
       </Container>
     </Container>
   );
