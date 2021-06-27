@@ -14,8 +14,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## About this project
 
-This project was developed during the Multistack free workshop from TreinaWeb, a very good brazilian development school.
+This project was developed during the Multistack free workshop from [TreinaWeb](https://www.treinaweb.com.br/), a very good development online school.
 
-The **e-diaristas** project was divided in two parts: The frontend (this one), and the backend that can be found in https://github.com/pmmdesenvolvedor/ediaristas-backend.
+The **e-diaristas** project was divided in two parts: The frontend (this one), and the backend that can be found in [ediaristas-backend repository](https://github.com/pmmdesenvolvedor/ediaristas-backend).
 
 Since the local backend project was properly initiated, change the URL at `src/data/services/Api.service.ts` and the frontend and backend will be integrated.
